@@ -2,10 +2,12 @@ package com.example.demo.domain.model;
 
 import com.example.demo.domain.model.compositekeys.ImageAnimeKey;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.persistence.*;
 import java.util.UUID;
 
+@JsonPropertyOrder({"imageid", "animeid", "imageurl"})
 @Entity
 @Table(name="images")
 @IdClass(ImageAnimeKey.class)

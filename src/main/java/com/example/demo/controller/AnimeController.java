@@ -111,10 +111,15 @@ public class AnimeController {
             if (authenticatedUser != null) {
                 BlockAnime blockAnime = blockAnimeRepository.findByAnimeid(requestBlockAnime.animeid);
                 blockAnimeRepository.delete(blockAnime);
-                return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels bloquejats l'anime amd id'" + requestBlockAnime.animeid + "'"));
+                return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels bloquejats l'anime amb id'" + requestBlockAnime.animeid + "'"));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
+    }
+
+    @GetMapping("/images/")
+    public ResponseEntity<?> findImagers() {
+        return ResponseEntity.ok().body(ListResult.list(imagesRepository.findBy(ProjectionImages.class)));
     }
 
     @GetMapping("/images/{id}")
@@ -123,12 +128,9 @@ public class AnimeController {
         if (result != null) {
             return ResponseEntity.ok().body(result);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorMessage.message("No s'ha trobat l'anime amd id '" + id + "'"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorMessage.message("No s'ha trobat l'anime amb id '" + id + "'"));
     }
-    @GetMapping("/images/")
-    public ResponseEntity<?> findImagers() {
-        return ResponseEntity.ok().body(ListResult.list(imagesRepository.findBy(ProjectionImages.class)));
-    }
+
     @PostMapping ("/images/")
     public ResponseEntity<?> imageAnime(@RequestBody RequestImage requestImage, Authentication authentication){
         if (authentication != null) {
@@ -136,7 +138,7 @@ public class AnimeController {
             if (authenticatedUser != null) {
                 Anime anime = animeRepository.findById(requestImage.animeid).orElse(null);
                 if (anime ==null){
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorMessage.message("No existeix l'anime amb id'" + requestImage.animeid + "'"));
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorMessage.message("No existeix l'anime amb id '" + requestImage.animeid + "'"));
                 }
                 Image images = new Image();
                 images.imageurl=requestImage.imageurl;
@@ -154,11 +156,11 @@ public class AnimeController {
             if (authenticatedUser != null) {
                 Image image = imagesRepository.findByImageid(requestImageDelete.imageid);
                 if (image ==null){
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorMessage.message("No existeix la imatge amb id'" + requestImageDelete.imageid + "'"));
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorMessage.message("No existeix la imatge amb id '" + requestImageDelete.imageid + "'"));
                 }
 
                 imagesRepository.delete(image);
-                return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat la imatge amd id'" + requestImageDelete.imageid + "'"));
+                return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat la imatge amb id'" + requestImageDelete.imageid + "'"));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
